@@ -1,49 +1,53 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
+import { Notify } from 'notiflix';
+import PropTypes from 'prop-types';
 
 import { ContactForm } from './ContactForm/ContactForm';
+import { Filter } from './Filter/Filter';
+import { ContactList } from './ContactList/ContactList';
 
 export class App extends Component {
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
+    contacts: [],
     filter: '',
   };
 
   addUser = data => {
-    const newAbonent = {
-      id: nanoid(),
-      ...data,
-    };
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, newAbonent],
-    }));
+    const findExistsName = this.state.contacts.some(
+      contact => contact.name === data.name
+    );
+    if (findExistsName) {
+      Notify.warning(`${data.name} is already in contacts`);
+      return;
+    } else {
+      const newAbonent = {
+        id: nanoid(),
+        ...data,
+      };
+      this.setState(prevState => ({
+        contacts: [...prevState.contacts, newAbonent],
+      }));
+    }
   };
 
-  handleSearchChange = e => {
-    console.log(e);
-    const { contacts, filter } = this.state;
-    // this.setState({ filter: value });
-    // const newUsers = contacts.filter(contact =>
-    //   contact.name.toLowerCase().includes(filter)
-    // );
-    // return newUsers;
+  handleSearch = e => {
+    this.setState({ filter: e.target.value });
+  };
 
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
-    );
+  handleDeleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(item => item.id !== contactId),
+    }));
+    return;
   };
 
   render() {
-    const { number, name, filter, contacts } = this.state;
-    // const newUsers = contacts.filter(contact =>
-    //   contact.name.toLowerCase().includes(filter)
-    // );
-    // console.log(newUsers);
+    const { contacts, filter } = this.state;
+    const newUsers = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+    console.log(newUsers);
 
     return (
       <>
@@ -51,26 +55,31 @@ export class App extends Component {
         <ContactForm onSubmit={this.addUser} />
         <div>
           <h2>Contacts</h2>
-          <label>
-            <p>Find contacts by name</p>
-            <input
-              type="text"
-              value={filter}
-              name="filter"
-              onChange={this.handleSearchChange}
-            />
-          </label>
-          <ul>
-            {this.state.contacts.map(contact => {
-              return (
-                <li key={nanoid()}>
-                  {contact.name}: {contact.number}
-                </li>
-              );
-            })}
-          </ul>
+          <Filter filterValue={filter} onSearch={this.handleSearch} />
+          <ContactList
+            users={newUsers}
+            onDeleteContact={this.handleDeleteContact}
+          />
         </div>
       </>
     );
   }
 }
+
+App.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.number,
+    })
+  ),
+};
+
+// Statistics.propTypes = {
+//   good: PropTypes.number.isRequired,
+//   neutral: PropTypes.number.isRequired,
+//   bad: PropTypes.number.isRequired,
+//   total: PropTypes.number.isRequired,
+//   positivePercentage: PropTypes.string.isRequired,
+// };
