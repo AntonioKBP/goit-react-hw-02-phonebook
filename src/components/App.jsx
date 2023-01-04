@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
 
+import { ContactForm } from './ContactForm/ContactForm';
+
 export class App extends Component {
   state = {
     contacts: [
@@ -10,68 +12,45 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
-  handleChange = e => {
-    // console.log(e.target.value);
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+  addUser = data => {
+    const newAbonent = {
+      id: nanoid(),
+      ...data,
+    };
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newAbonent],
+    }));
   };
 
   handleSearchChange = e => {
-    const { value } = e.target;
-    this.setState({ filter: value });
-  };
+    console.log(e);
+    const { contacts, filter } = this.state;
+    // this.setState({ filter: value });
+    // const newUsers = contacts.filter(contact =>
+    //   contact.name.toLowerCase().includes(filter)
+    // );
+    // return newUsers;
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.state.contacts.push(this.state);
-    this.setState({ name: '', number: '' });
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
   };
 
   render() {
     const { number, name, filter, contacts } = this.state;
-    const newUsers = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter)
-    );
-    console.log(newUsers);
+    // const newUsers = contacts.filter(contact =>
+    //   contact.name.toLowerCase().includes(filter)
+    // );
+    // console.log(newUsers);
 
     return (
       <>
         <h1>PhoneBook</h1>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="name">
-              <p>Name</p>
-              <input
-                value={name}
-                type="text"
-                name="name"
-                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                required
-                onChange={this.handleChange}
-              />
-            </label>
-            <label>
-              <p>Number</p>
-              <input
-                value={number}
-                type="tel"
-                name="number"
-                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-                required
-                onChange={this.handleChange}
-              />
-            </label>
-          </div>
-          <button type="submit">Add contact</button>
-        </form>
+        <ContactForm onSubmit={this.addUser} />
         <div>
-          <p>Contacts</p>
+          <h2>Contacts</h2>
           <label>
             <p>Find contacts by name</p>
             <input
