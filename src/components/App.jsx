@@ -7,9 +7,20 @@ import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
 
+import {
+  Main,
+  MainTitle,
+  SecondartTitle,
+} from './TitleAndMainStyled/TitleAndMainStyled.styled';
+
 export class App extends Component {
   state = {
-    contacts: [],
+    contacts: [
+      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
+      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
+    ],
     filter: '',
   };
 
@@ -32,6 +43,7 @@ export class App extends Component {
   };
 
   handleSearch = e => {
+    console.log(this.state.contacts.name.length);
     this.setState({ filter: e.target.value });
   };
 
@@ -50,18 +62,19 @@ export class App extends Component {
     console.log(newUsers);
 
     return (
-      <>
-        <h1>PhoneBook</h1>
+      <Main>
+        <MainTitle>PhoneBook</MainTitle>
         <ContactForm onSubmit={this.addUser} />
-        <div>
-          <h2>Contacts</h2>
-          <Filter filterValue={filter} onSearch={this.handleSearch} />
+
+        <SecondartTitle>Contacts</SecondartTitle>
+        <Filter filterValue={filter} onSearch={this.handleSearch} />
+        {this.contacts.length > 0 && (
           <ContactList
             users={newUsers}
             onDeleteContact={this.handleDeleteContact}
           />
-        </div>
-      </>
+        )}
+      </Main>
     );
   }
 }
@@ -70,16 +83,9 @@ App.propTypes = {
   contacts: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
-      name: PropTypes.string.isRequired,
+      name: PropTypes.number.isRequired,
       number: PropTypes.number,
     })
   ),
+  filter: PropTypes.string,
 };
-
-// Statistics.propTypes = {
-//   good: PropTypes.number.isRequired,
-//   neutral: PropTypes.number.isRequired,
-//   bad: PropTypes.number.isRequired,
-//   total: PropTypes.number.isRequired,
-//   positivePercentage: PropTypes.string.isRequired,
-// };

@@ -1,16 +1,18 @@
+import { List, ListItem, ListItemBtn } from './ContactList.styled';
+
 export const ContactList = ({ users, onDeleteContact }) => {
   return (
-    <ul>
+    <List>
       {users.map(user => {
         return (
-          <li key={user.id}>
+          <ListItem key={user.id}>
             {user.name}: {user.number}{' '}
-            <button type="button" onClick={() => onDeleteContact(user.id)}>
+            <ListItemBtn type="button" onClick={() => onDeleteContact(user.id)}>
               X
-            </button>
-          </li>
+            </ListItemBtn>
+          </ListItem>
         );
       })}
-    </ul>
+    </List>
   );
 };
