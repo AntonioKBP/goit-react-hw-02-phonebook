@@ -80,13 +80,13 @@ export class App extends Component {
   }
 }
 
-// App.propTypes = {
-//   contacts: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.string,
-//       name: PropTypes.number.isRequired,
-//       number: PropTypes.number,
-//     })
-//   ),
-//   filter: PropTypes.string,
-// };
+App.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.number.isRequired,
+      number: PropTypes.number,
+    })
+  ),
+  filter: PropTypes.string,
+};
