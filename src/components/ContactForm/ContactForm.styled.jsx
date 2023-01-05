@@ -63,6 +63,8 @@ export const FormBtn = styled.button`
   white-space: nowrap;
   will-change: box-shadow, transform;
   font-size: 16px;
+  width: 120px;
+  margin: 0 auto;
 
   &:focus {
     box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
