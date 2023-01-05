@@ -1,4 +1,5 @@
 import { List, ListItem, ListItemBtn } from './ContactList.styled';
+import { RiDeleteBin2Line } from 'react-icons/ri';
 
 export const ContactList = ({ users, onDeleteContact }) => {
   return (
@@ -8,7 +9,7 @@ export const ContactList = ({ users, onDeleteContact }) => {
           <ListItem key={user.id}>
             {user.name}: {user.number}{' '}
             <ListItemBtn type="button" onClick={() => onDeleteContact(user.id)}>
-              X
+              <RiDeleteBin2Line />
             </ListItemBtn>
           </ListItem>
         );
